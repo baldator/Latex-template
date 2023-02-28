@@ -1,0 +1,32 @@
+name: Build LaTeX Template
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install LaTeX Packages
+        run: |
+          sudo apt-get update -y && sudo apt-get install -y \
+          texlive-latex-base \
+          texlive-fonts-recommended \
+          texlive-latex-extra \
+          biber
+
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build LaTeX Template
+        run: |
+          pdflatex -interaction=nonstopmode -halt-on-error -file-line-error template.tex
+          biber template
+          pdflatex -interaction=nonstopmode -halt-on-error -file-line-error template.tex
+          pdflatex -interaction=nonstopmode -halt-on-error -file-line-error template.tex
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: journal-template
+          path: template.pdf
