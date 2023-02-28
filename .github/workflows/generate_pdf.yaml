@@ -14,6 +14,10 @@ jobs:
           texlive-fonts-recommended \
           texlive-latex-extra \
           biber
+        
+      - name: Add texlive to PATH
+        run: | 
+          PATH=/usr/local/texlive/2011/bin/i386-linux:$PATH
 
       - name: Checkout Repository
         uses: actions/checkout@v2
